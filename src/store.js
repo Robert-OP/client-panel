@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import firebase from 'firebase/app';
+import firebase from 'firebase';
 import 'firebase/firestore';
 import { reactReduxFirebase, firebaseReducer } from 'react-redux-firebase';
 import { reduxFirestore, firestoreReducer } from 'redux-firestore';
@@ -9,7 +9,7 @@ import notifyReducer from './reducers/notifyReducer';
 import settingsReducer from './reducers/settingsReducer';
 
 const firebaseConfig = {
-  // firebase api config should go here
+  // firebase api config
 };
 
 const rrfConfig = {
