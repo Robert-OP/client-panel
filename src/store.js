@@ -1,18 +1,15 @@
 import { createStore, combineReducers, compose } from 'redux';
-import firebase from 'firebase';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { reactReduxFirebase, firebaseReducer } from 'react-redux-firebase';
 import { reduxFirestore, firestoreReducer } from 'redux-firestore';
 // reducers
+import notifyReducer from './reducers/notifyReducer';
+import settingsReducer from './reducers/settingsReducer';
 
 const firebaseConfig = {
-  // firebase api config
-  apiKey: 'AIzaSyD05iLTa0S7EBxMU6f1lbknJPfMzKDHBF0',
-  authDomain: 'reactclientpanel-4318f.firebaseapp.com',
-  databaseURL: 'https://reactclientpanel-4318f.firebaseio.com',
-  projectId: 'reactclientpanel-4318f',
-  storageBucket: 'reactclientpanel-4318f.appspot.com',
-  messagingSenderId: '895190793716'
+  // firebase api config should go here
 };
 
 const rrfConfig = {
@@ -36,18 +33,30 @@ const createStoreWithFirebase = compose(
 // add firebase to reducers
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
-  firestore: firestoreReducer
+  firestore: firestoreReducer,
+  notify: notifyReducer,
+  settings: settingsReducer
 });
 
-// initial state
-const initialState = {};
+// check for settings in localStorage
+if (!localStorage.getItem('settings')) {
+  // default settings
+  const defaultSettings = {
+    disableBalanceOnAdd: true,
+    disableBalanceOnEdit: false,
+    allowRegistration: false
+  };
+
+  // set to localStorage
+  localStorage.setItem('settings', JSON.stringify(defaultSettings));
+}
+
+// initial state & create store
+const initialState = { settings: JSON.parse(localStorage.getItem('settings')) };
 const store = createStoreWithFirebase(
   rootReducer,
   initialState,
-  compose(
-    reactReduxFirebase(firebase),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  )
+  composeWithDevTools(reactReduxFirebase(firebase))
 );
 
 export default store;

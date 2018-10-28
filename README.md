@@ -4,4 +4,4 @@
 
 ## Firestore + Firebase Authentication
 
-### Check it out here:
+### Check it out on Firebase Hosting: https://reactclientpanel-4318f.firebaseapp.com
